@@ -156,7 +156,11 @@ import org.checkerframework.checker.nullness.compatqual.MonotonicNonNullDecl;
 public final class CacheBuilder<K, V> {
   private static final int DEFAULT_INITIAL_CAPACITY = 16;
   private static final int DEFAULT_CONCURRENCY_LEVEL = 4;
+
+  @SuppressWarnings("GoodTime") // should be a java.time.Duration
   private static final int DEFAULT_EXPIRATION_NANOS = 0;
+
+  @SuppressWarnings("GoodTime") // should be a java.time.Duration
   private static final int DEFAULT_REFRESH_NANOS = 0;
 
   static final Supplier<? extends StatsCounter> NULL_STATS_COUNTER =
@@ -168,9 +172,11 @@ public final class CacheBuilder<K, V> {
             @Override
             public void recordMisses(int count) {}
 
+            @SuppressWarnings("GoodTime") // b/122668874
             @Override
             public void recordLoadSuccess(long loadTime) {}
 
+            @SuppressWarnings("GoodTime") // b/122668874
             @Override
             public void recordLoadException(long loadTime) {}
 
@@ -231,8 +237,13 @@ public final class CacheBuilder<K, V> {
   @MonotonicNonNullDecl Strength keyStrength;
   @MonotonicNonNullDecl Strength valueStrength;
 
+  @SuppressWarnings("GoodTime") // should be a java.time.Duration
   long expireAfterWriteNanos = UNSET_INT;
+
+  @SuppressWarnings("GoodTime") // should be a java.time.Duration
   long expireAfterAccessNanos = UNSET_INT;
+
+  @SuppressWarnings("GoodTime") // should be a java.time.Duration
   long refreshNanos = UNSET_INT;
 
   @MonotonicNonNullDecl Equivalence<Object> keyEquivalence;
@@ -640,6 +651,7 @@ public final class CacheBuilder<K, V> {
    * @throws IllegalArgumentException if {@code duration} is negative
    * @throws IllegalStateException if the time to live or time to idle was already set
    */
+  @SuppressWarnings("GoodTime") // should accept a java.time.Duration
   public CacheBuilder<K, V> expireAfterWrite(long duration, TimeUnit unit) {
     checkState(
         expireAfterWriteNanos == UNSET_INT,
@@ -676,6 +688,7 @@ public final class CacheBuilder<K, V> {
    * @throws IllegalArgumentException if {@code duration} is negative
    * @throws IllegalStateException if the time to idle or time to live was already set
    */
+  @SuppressWarnings("GoodTime") // should accept a java.time.Duration
   public CacheBuilder<K, V> expireAfterAccess(long duration, TimeUnit unit) {
     checkState(
         expireAfterAccessNanos == UNSET_INT,
@@ -719,6 +732,7 @@ public final class CacheBuilder<K, V> {
    * @since 11.0
    */
   @GwtIncompatible // To be supported (synchronously).
+  @SuppressWarnings("GoodTime") // should accept a java.time.Duration
   public CacheBuilder<K, V> refreshAfterWrite(long duration, TimeUnit unit) {
     checkNotNull(unit);
     checkState(refreshNanos == UNSET_INT, "refresh was already set to %s ns", refreshNanos);
